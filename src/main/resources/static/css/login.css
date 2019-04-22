@@ -1,0 +1,59 @@
+body{
+	font-size:12px;
+	font-family:Verdana, Geneva, sans-serif;
+	line-height:23px;
+	margin:0;
+	padding:0;
+	background:url(/logimage/login_bg.jpg);
+	color:#3b6e81;
+	}
+.second_body{
+	margin:0 auto;
+	width:330px;
+	height:243px;
+	margin-top:10%;
+	padding-left:300px;
+	padding-top:110px;
+	background:url(/logimage/login_panel.png) no-repeat;
+    position:relative;
+	}
+
+.title-zh
+{
+    position:absolute;
+    top:50px;
+    left:320px;
+    font-size:26px;
+    font-weight:900;
+    color:#0074a6;
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
+}
+ .message
+{   
+    position:absolute;
+    bottom:80px;
+    left:312px;
+    color:red;
+}
+
+.logo
+{
+     position:absolute;
+     left:50px;
+     top:80px;
+}
+
+.login_button,.register_botton{
+	width:58px;
+	height:26px;
+    line-height:26px;
+	border:none;
+	color:#FFF;
+	font-weight:bold;
+	background:url(/logimage/login1.jpg);
+	margin-left:15px;
+	}
+.register_botton{
+	background:url(/logimage/reset.jpg);
+	}

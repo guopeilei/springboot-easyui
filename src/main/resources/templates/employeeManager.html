@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>员工管理界面</title>
+
+    <meta charset="utf-8"></meta>
+    <link rel="stylesheet" type="text/css" href="/jquery-easyui/themes/default/easyui.css"
+          th:href="@{/jquery-easyui/themes/default/easyui.css}"/>
+    <link rel="stylesheet" type="text/css" href="/jquery-easyui/themes/icon.css"
+          th:href="@{/jquery-easyui/themes/icon.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/login.css"
+          th:href="@{/css/login.css}"/>
+    <script type="text/javascript" src="/jquery-easyui/jquery.min.js"
+            th:src="@{/jquery-easyui/jquery.min.js}"></script>
+    <script type="text/javascript" src="/jquery-easyui/jquery.easyui.min.js"
+            th:src="@{/jquery-easyui/jquery.easyui.min.js}"></script>
+</head>
+
+<body>
+<div class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'north'" style="width: 100%;height: 9%">
+    </div>
+
+    <div data-options="region:'center',title:'用户信息列表'">
+        <table id="datagrid"  class="easyui-datagrid" style="width:100%;height:100%"
+               url="/getEmployeeInfo"
+               th:data="${employees}"
+               toolbar="#dgtoolbar" pagination="true"
+               pageSize="25"    pageList="[25,15,10]"
+               rownumbers="false" fitColumns="true" singleSelect="true" >
+            <thead>
+            <tr>
+                <th data-options="field:'employeeid',align:'center',width:'9%'">员工编号</th>
+                <th data-options="field:'employeename',align:'center',width:'9%'">姓名</th>
+                <th data-options="field:'age',align:'center',width:'9%'">年龄</th>
+                <th data-options="field:'image',align:'center',width:'11%'">照片</th>
+                <th data-options="field:'video',align:'center',width:'9%'">视频</th>
+                <th data-options="field:'employeedesc',align:'center',width:'9%'">描述</th>
+            </tr>
+            </thead>
+        </table>
+        <div id="dgtoolbar">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUsers()">添加用户</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true" onclick="removeUsers()">删除用户</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="editEmployee()">修改信息</a>
+        </div>
+
+    </div>
+</div>
+<!--</div>-->
+
+<div id="modifydg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+     closed="true" buttons="#modifydg-buttons">
+    <div class="ftitle">用户信息</div>
+    <form id="fim" method="post" >
+        <div class="fitem">
+            <label>学号:</label>
+            <input name="sno" class="easyui-validatebox" required="true" />
+        </div>
+        <div class="fitem">
+            <label>姓名:</label>
+            <input name="sname" class="easyui-validatebox" required="true" />
+        </div>
+        <div class="fitem">
+            <label>密码:</label>
+            <input name="password" class="easyui-validatebox" required="true" />
+        </div>
+        <div class="fitem">
+            <label>课程号:</label>
+            <input name="tno" class="easyui-validatebox" required="true" />
+        </div>
+        <div class="fitem">
+            <label>课程名:</label>
+            <input name="tname" class="easyui-validatebox" required="true" />
+        </div>
+        <div class="fitem">
+            <label>课程名:</label>
+            <input name="tgrade" class="easyui-validatebox" required="true" />
+        </div>
+    </form>
+</div>
+<div id="modifydg-buttons">
+    <a href="#" class="easyui-linkbutton"  onclick="saveUsers()">保存</a>
+    <a href="#" class="easyui-linkbutton"  onclick="javascript:$('#modifydg').dialog('close')">取消</a>
+</div >
+
+<div id ="details" class="easyui-window" title="员工信息详情" style="width:500px;height:600px"
+     data-options="iconCls:'icon-save',modal:true" closed="true" closable="true">
+    <form id="employeeDetail" method="post" >
+        <table id="detail-table" class="easyui-propertygrid" style="width:100%;height:auto">
+        </table>
+    </form>
+    <div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
+        <a class="easyui-linkbutton" id="detail-ok"     data-options="iconCls:'icon-ok'"     href="javascript:void(0)" onclick="closeDetail()" style="width:80px">Ok</a>
+        <a class="easyui-linkbutton" id="detail-summit" data-options="iconCls:'icon-ok'"     href="javascript:void(0)" onclick="submitDetail()" style="display:none;width:80px">保存</a>
+        <a class="easyui-linkbutton" id="detail-cancel" data-options="iconCls:'icon-cancel'" href="javascript:void(0)" onclick="closeDetail()" style="display:none;width:80px">取消</a>
+
+    </div>
+</div>
+
+<div id="adddg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+     closed="true" buttons="#adddg-buttons">
+    <div class="ftitle">用户信息</div>
+    <form id="fam" method="post" >
+        <div class="fitem">
+            <label>学号:</label>
+            <input name="sno" class="easyui-validatebox" required="true" />
+        </div>
+        <div class="fitem">
+            <label>姓名:</label>
+            <input name="sname" class="easyui-validatebox" required="true" />
+        </div>
+        <div class="fitem">
+            <label>密码:</label>
+            <input name="password" class="easyui-validatebox" required="true" />
+        </div>
+        <div class="fitem">
+            <label>课程号:</label>
+            <input name="tno" class="easyui-validatebox" required="true" />
+        </div>
+        <div class="fitem">
+            <label>课程名:</label>
+            <input name="tname" class="easyui-validatebox" required="true" />
+        </div>
+        <div class="fitem">
+            <label>课程成绩:</label>
+            <input name="tgrade" class="easyui-validatebox" required="true" />
+        </div>
+    </form>
+</div>
+<div id="adddg-buttons">
+    <a href="#" class="easyui-linkbutton"  onclick="addUsers()">添加</a>
+    <a href="#" class="easyui-linkbutton"  onclick="javascript:$('#adddg').dialog('close')">取消</a>
+</div>
+
+</body>
+<script th:inline="javascript">
+    $(function() {
+        $('#employeeDetail').form({
+            url:"/userLogin",
+            onSubmit: function(){
+                // do some check
+                // return false to prevent submit;
+            },
+            success:function(data){
+                location.href='/home';
+            }
+        });
+        $("#datagrid").datagrid( {
+            onDblClickRow: function(rowIndex, rowData){
+                $('#details').dialog('open');
+                $("#detail-ok").show();
+                $('#detail-summit').css('display','none');
+                $('#detail-cancel').css('display','none');
+                var rows = [
+                    { "name": "员工编号", "group": "帐号", "value": rowData.employeei },
+                    { "name": "员工姓名", "group": "帐号", "value": rowData.employeename},
+                    { "name": "员工年龄", "group": "其它", "value": rowData.age },
+                    { "name": "员工照片", "group": "其它", "value": rowData.image },
+                    { "name": "员工手机", "group": "其它", "value": rowData.phone },
+                    { "name": "员工住址", "group": "其它", "value": rowData.address },
+                    { "name": "员工视频", "group": "其它", "value": rowData.video },
+                    { "name": "员工邮箱", "group": "其它", "value": rowData.mail },
+                    { "name": "员工介绍", "group": "其它", "value": rowData.employeedesc }
+
+                ];
+                $('#detail-table').propertygrid('loadData',rows);
+            }
+        });
+    });
+    function editEmployee() {
+
+        $("#detail-ok").css('display','none');
+        $('#detail-summit').show();
+        $('#detail-cancel').show();
+
+        var rowData = $('#datagrid').datagrid('getSelected');
+        if (rowData!=null){
+            var rows = [
+                { "name": "员工编号", "group": "帐号", "value": rowData.employeeid , "editor":"text" },
+                { "name": "员工姓名", "group": "帐号", "value": rowData.employeename , "editor": "text" },
+                { "name": "员工年龄", "group": "其它", "value": rowData.age , "editor": "text" },
+                { "name": "员工照片", "group": "其它", "value": rowData.image , "editor": "text" },
+                { "name": "员工手机", "group": "其它", "value": rowData.phone , "editor": "text" },
+                { "name": "员工住址", "group": "其它", "value": rowData.address , "editor": "text" },
+                { "name": "员工视频", "group": "其它", "value": rowData.video , "editor": "text" },
+                { "name": "员工邮箱", "group": "其它", "value": rowData.mail , "editor": "text" },
+                { "name": "员工介绍", "group": "其它", "value": rowData.employeedesc , "editor": "text" }
+
+            ];
+            $('#details').dialog('open');
+            $('#detail-table').propertygrid('loadData',rows);
+        }else{
+            alert("请选中一行数据");
+        }
+
+    }
+    function submitDetail(){
+        $('#employeeDetail').submit();
+    }
+
+    function closeDetail() {
+        $('#details').window('close')
+
+    }
+</script>
+</html>

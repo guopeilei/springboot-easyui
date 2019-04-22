@@ -1,0 +1,101 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:float="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"></meta>
+    <link rel="stylesheet" type="text/css" href="/jquery-easyui/themes/default/easyui.css"
+          th:href="@{/jquery-easyui/themes/default/easyui.css}"/>
+    <link rel="stylesheet" type="text/css" href="/jquery-easyui/themes/icon.css"
+          th:href="@{/jquery-easyui/themes/icon.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/login.css"
+          th:href="@{/css/login.css}"/>
+    <script type="text/javascript" src="/jquery-easyui/jquery.min.js"
+            th:src="@{/jquery-easyui/jquery.min.js}"></script>
+    <script type="text/javascript" src="/jquery-easyui/jquery.easyui.min.js"
+            th:src="@{/jquery-easyui/jquery.easyui.min.js}"></script>
+</head>
+
+<body class="easyui-layout">
+    <div data-options="region:'north'" style="height: 70px;overflow: hidden;padding: 0 10px;">
+        <div class="user-info">
+            <span class="item" id="public_change_info"><i class="fa fa-user"></i> ${s_member.realName}</span>
+            <span class="item" id="public_change_password"><i class="fa fa-user"></i> 修改密码</span>
+            <a class="item" href="/logout"><i class="fa fa-sign-out"></i> 注销</a>
+        </div>
+        <h1>员工信息管理系统</h1>
+    </div>
+    <div title="菜单" data-options="region:'west',iconCls:'fa-list'" style="width: 200px">
+        <div id="menu-tree" class="easyui-accordion" data-options="fit:true,border:false">
+            <div th:each="menu : ${menus}" th:if="${menu.getParentid()} eq 0" th:title="${menu.getName()}">
+                <ul class="easyui-tree" data-options="lines: true">
+                    <li th:each="child : ${menus}" th:if="${child.getParentid()} eq ${menu.getId()}">
+                        <span><a th:title="${child.getUrl()}"  th:text="${child.getName()}"></a></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<div id= "center-panel"data-options="region:'center'">
+    <div id="tabs" class="easyui-tabs"  fit="true" border="false" >
+        <div title="欢迎使用" style="padding:20px;overflow:hidden;" id="home">
+
+            <h1>Welcome to using The jQuery EasyUI!</h1>
+
+        </div>
+    </div>
+</div>
+<div id="footer" data-options="region:'south'" style="height:20px;text-align: center;line-height: 20px;overflow: hidden;">
+    <div id="online" class="online">
+        当前在线人数：<span v-text="online"></span>
+    </div>
+    <a>员工信息管理系统 sd</a>
+
+    <div id="online_list" class="online-list">
+        <div class="online-list-header">
+            <i class="fa fa-close"></i>
+            <span>系统在线用户</span>
+        </div>
+        <div class="online-list-users">
+            <ul>
+                <li v-for="(user,i) in onlineUser" :id="'user'+user.uid" :key="user" :index="i" @click="sendMsg(user,${s_member.id})">
+                    <span class="online-user-avator">
+                        <i class="fa fa-user"></i>
+                    </span>
+                    <span v-text="user.realName"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(function() {
+        // 导航菜单绑定初始化
+        $("#menu-tree").accordion( {
+            animate : false
+        });
+
+        InitLeftMenu();
+    });
+    // 初始化左侧
+    function InitLeftMenu() {
+
+        $('#menu-tree li a').click(function () {
+            var url = this.title;
+            var subTitle = this.innerText;
+            var s = '<iframe scrolling="auto" frameborder="0"  src="' + url + '" style="width:100%;height:100%;"></iframe>';
+            if (!$('#tabs').tabs('exists', subTitle)) {
+                $('#tabs').tabs('add', {
+                    title : subTitle,
+                    content : s,
+                    closable : true
+                });
+            } else {
+                $('#tabs').tabs('select', subTitle);
+            }
+        });
+
+    }
+</script>
+</html>

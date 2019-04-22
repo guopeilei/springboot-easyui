@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>员工管理登录界面</title>
+</head>
+
+<body>
+<link rel="stylesheet" type="text/css" href="/jquery-easyui/themes/default/easyui.css"
+      th:href="@{/jquery-easyui/themes/default/easyui.css}"/>
+<link rel="stylesheet" type="text/css" href="/jquery-easyui/themes/icon.css"
+      th:href="@{/jquery-easyui/themes/icon.css}"/>
+<link rel="stylesheet" type="text/css" href="/css/login.css"
+      th:href="@{/css/login.css}"/>
+<script type="text/javascript" src="/jquery-easyui/jquery.min.js"
+        th:src="@{/jquery-easyui/jquery.min.js}"></script>
+<script type="text/javascript" src="/jquery-easyui/jquery.easyui.min.js"
+        th:src="@{/jquery-easyui/jquery.easyui.min.js}"></script>
+<div class="second_body">
+<form method ="POST" id="login" name="frmLogin"  >
+    <div class="logo"></div>
+    <div class="title-zh">员工信息管理系统</div>
+    <div class="message" data-bind="html:message"></div>
+    <table border="0" style="width:300px;">
+        <tr>
+            <td style="white-space:nowrap; padding-bottom: 5px;width:55px;">用户名：</td>
+            <td colspan="2">
+                <input class="easyui-textbox" data-options="iconCls:'icon-man'" style="width:200px" name="username">
+            </td>
+        </tr>
+        <tr>
+            <td class="lable" style="white-space:nowrap; letter-spacing: 0.5em; vertical-align: middle">密 码：</td>
+            <td colspan="2">
+                <input class="easyui-textbox" data-options="iconCls:'icon-lock'" style="width:200px" name="password">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align:center">
+                <input type="button" class="login_button"  name="userName" value="登录" th:onclick="'login_submit()'" />
+                <input type="button" class="register_botton" name="passWord" value="注册" onclick="location.href='http://localhost:8080/test/zc.html?login=%B5%C7%C2%BC'">
+            </td>
+        </tr>
+    </table>
+</form>
+</div>
+</body>
+<script th:inline="javascript">
+    $(function() {
+        $('#login').form({
+            url:"/userLogin",
+            onSubmit: function(){
+                // do some check
+                // return false to prevent submit;
+            },
+            success:function(data){
+                location.href='/home';
+            }
+        });
+
+    });
+    function login_submit() {
+        $('#login').submit();
+    }
+</script>
+</html>
